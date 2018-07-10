@@ -7,7 +7,8 @@ Run plugin in IDEA:
 ./gradlew runIde
 ```
 
-Build the plugin to a zip:
+Build the plugin to a zip
+-------------------------
 
 ```
 ./gradlew buildPlugin
