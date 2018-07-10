@@ -8,7 +8,16 @@ buildscript {
     }
 }
 
+plugins {
+    id "org.jetbrains.intellij" version "0.3.4"
+}
+
 apply plugin: 'kotlin'
+
+intellij {
+    version 'IC-2018.1.5'
+    plugins = []
+}
 
 repositories {
     jcenter()
