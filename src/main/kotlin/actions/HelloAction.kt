@@ -6,8 +6,8 @@ import com.intellij.openapi.ui.Messages
 
 class HelloAction : AnAction() {
 
-    override fun actionPerformed(anActionEvent: AnActionEvent) {
+    override fun actionPerformed(event: AnActionEvent) {
         Messages.showInfoMessage("Hello from my plugin", "Hello")
     }
-    
+
 }
