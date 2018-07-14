@@ -16,6 +16,8 @@ For keyshorts are provided (and you can change it too, for me, I just use `optio
 - `ctrl + option + up`: Jump to previous line, skip lines not contain any word
 - `ctrl + option + down`: Jump to next line, skip lines not contain any word
 
+If the keyshorts are not working, please set them manually for now.
+
     ]]></description>
 
     <change-notes><![CDATA[

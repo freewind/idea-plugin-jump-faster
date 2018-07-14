@@ -12,13 +12,9 @@ For keyshorts are provided (and you can change it too, for me, I just use `optio
 - `ctrl + option + up`: Jump to previous line, skip lines not contain any word
 - `ctrl + option + down`: Jump to next line, skip lines not contain any word
 
-For now, you can just clone the plugin and build it manually.
+If the keyshorts are not working, please set them manually for now (I'll fix this)
 
-Run plugin in IDEA:
-
-```
-./gradlew runIde
-```
+For now, you can just clone the plugin and build it manually, I will publish it to IDEA plugin site soon.
 
 Build the plugin to a zip
 -------------------------
@@ -28,6 +24,14 @@ Build the plugin to a zip
 ```
 
 It will generate the plugin file in `./build/distributions`
+
+Run plugin in IDEA for Dev
+--------------------------
+
+```
+./gradlew runIde
+```
+
 
 Notice
 -------
