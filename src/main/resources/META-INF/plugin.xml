@@ -1,12 +1,21 @@
 <idea-plugin>
-    <id>idea-plugin-hello-world-demo</id>
-    <name>idea-plugin-hello-world-demo</name>
+    <id>idea-plugin-jump-faster</id>
+    <name>idea-plugin-jump-faster</name>
     <version>1.0</version>
-    <vendor email="support@yourcompany.com" url="http://www.yourcompany.com">YourCompany</vendor>
+    <vendor email="nowindlee@gmail.com" url="http://freewind.in">None</vendor>
 
     <description><![CDATA[
-      Enter short description for your plugin here.<br>
-      <em>most HTML tags may be used</em>
+      This IDEA plugin makes us jump to left/right/up/down a little faster (than `option + left/right`)
+
+In this plugin, I defined words contains only such characters: `a-zA-Z0-9_$`, all others are treated as _blank_ chars when jumping.
+
+For keyshorts are provided (and you can change it too, for me, I just use `option + left/right/up/down`):
+
+- `ctrl + option + left`: Jump to previous word, skip all non word chars
+- `ctrl + option + right`: Jump to next word, skip all non word chars
+- `ctrl + option + up`: Jump to previous line, skip lines not contain any word
+- `ctrl + option + down`: Jump to next line, skip lines not contain any word
+
     ]]></description>
 
     <change-notes><![CDATA[
@@ -30,9 +39,20 @@
 
     <actions>
 
-        <group id="MyPlugin.SampleMenu" text="_Sample Menu" description="Sample menu">
-            <add-to-group group-id="MainMenu" anchor="last"/>
-            <action id="action.popup" class="actions.HelloAction" text="_Popup" description="Popup a message"/>
+        <group id="jumpfaster" text="_Jump Faster" description="Jump Faster">
+            <add-to-group group-id="EditMenu" anchor="last"/>
+            <action id="action.jumpleft" class="jumpfaster.actions.JumpLeftAction" text="Jump _Left" description="Jump to left word">
+                <keyboard-shortcut first-keystroke="ctrl alt left" keymap="$default"/>
+            </action>
+            <action id="action.jumpright" class="jumpfaster.actions.JumpRightAction" text="Jump _Right" description="Jump to right word">
+                <keyboard-shortcut first-keystroke="ctrl alt right" keymap="$default"/>
+            </action>
+            <action id="action.jump-up" class="jumpfaster.actions.JumpUpAction" text="Jump _Up" description="Jump to previous line">
+                <keyboard-shortcut first-keystroke="ctrl alt up" keymap="$default"/>
+            </action>
+            <action id="action.jump-down" class="jumpfaster.actions.JumpDownAction" text="Jump _Down" description="Jump to next line">
+                <keyboard-shortcut first-keystroke="ctrl alt down" keymap="$default"/>
+            </action>
         </group>
 
     </actions>
