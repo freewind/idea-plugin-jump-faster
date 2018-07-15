@@ -12,7 +12,7 @@ For keyshorts are provided only for Mac keymaps(`Mac OS X` and `Mac OS X 10.5+`)
 - `ctrl + option + up`: Jump to previous line, skip lines not contain any word
 - `ctrl + option + down`: Jump to next line, skip lines not contain any word
 
-If the keyshorts are not working, please set them manually for now (I'll fix this)
+If the keyshorts are not working, please set them manually.
 
 For now, you can just clone the plugin and build it manually, I will publish it to IDEA plugin site soon.
 
@@ -31,10 +31,3 @@ Run plugin in IDEA for Dev
 ```
 ./gradlew runIde
 ```
-
-
-Notice
--------
-
-- Use `version 'IC-2018.1.5'` every time to reduce download. (about 500M)
-- Don't forget to change `id` and `name` in `resources/META-INF/plugin.xml` to current project

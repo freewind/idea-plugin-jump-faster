@@ -57,7 +57,7 @@ fun jumpDown(text: String, caret: Int): Int {
 
     val goodLines = skipLines + remain.first()
     val newCaretInLine = run {
-        val caretInLine = text.take(caret).reader().readLines().last().length
+        val caretInLine = text.take(caret).reader().readLines().lastOrNull()?.length ?: 0
         minOf(caretInLine, goodLines.last().length)
     }
 

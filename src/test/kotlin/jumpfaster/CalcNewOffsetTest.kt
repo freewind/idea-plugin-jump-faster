@@ -185,4 +185,10 @@ class JumpDownTest {
         assertThat(offset).isEqualTo(caretAfter("aaaaaa\nbbb"))
     }
 
+    @Test
+    fun `If the caret is in doc start, it will work well`() {
+        val offset = jumpDown("aaa\nbbb", 0)
+        assertThat(offset).isEqualTo(caretAfter("aaa\n"))
+    }
+    
 }
