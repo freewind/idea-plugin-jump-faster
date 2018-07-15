@@ -8,80 +8,49 @@ fun caretAfter(text: String): Int {
 fun jumpLeft(text: String, caret: Int): Int = when (caret) {
     0 -> 0
     else -> {
-        text.take(caret)
-                .dropLastWhile { !it.isWordChar() }
-                .dropLastWhile { it.isWordChar() }
-                .length
+        val lines = calcLineOffsets(text)
+        lines.lastOrNull { it.wordEnds.any { it < caret } }?.wordEnds?.lastOrNull { it < caret }
+                ?: lines.firstOrNull()?.wordStarts?.firstOrNull()
+                ?: caret
     }
 }
 
 fun jumpRight(text: String, caret: Int): Int = when (caret) {
     caretAfter(text) -> caret
     else -> {
-        val textAfterCaret = text.drop(caret)
-        val textAfterNewCaret = textAfterCaret.dropWhile { it.isWordChar() }.dropWhile { !it.isWordChar() }
-        caret + (textAfterCaret.length - textAfterNewCaret.length)
+        val lines = calcLineOffsets(text)
+        lines.firstOrNull { it.wordStarts.any { it > caret } }?.wordStarts?.firstOrNull { it > caret }
+                ?: lines.lastOrNull()?.wordEnds?.lastOrNull()
+                ?: caret
     }
 }
 
-
 fun jumpUp(text: String, caret: Int): Int {
-    val textBeforeCaret = text.take(caret)
-    val lines = textBeforeCaret.reader().readLines()
-    if (lines.size <= 1) return caret
-
-    val goodLines = lines.dropLast(1).dropLastWhile { !it.containsWordChar() }
-    if (goodLines.isEmpty()) return caret
-
-    val newCaretInLine = minOf(lines.last().length, goodLines.last().length)
-
-    val lineSeparator = text.findLineSeparator()!!
-    val newCaret = goodLines.dropLast(1).joinToString("") { it + lineSeparator }.length + newCaretInLine
-    return newCaret
-}
-
-
-private fun Char.isLineSeparator(): Boolean {
-    return this == '\r' || this == '\n'
+    val lines = calcLineOffsets(text)
+    val currentLine = lines.find { it.containsCaret(caret)!! }!!
+    val column = currentLine.column(caret)
+    val validPrevLine = lines.filter { it.lineEnd!! < caret }
+            .dropLastWhile { it.wordEnds.isEmpty() }
+            .lastOrNull()
+    return validPrevLine?.let { line -> line.wordEnds.lastOrNull { line.column(it) <= column } ?: line.wordEnds.first { line.column(it) > column } }
+            ?: currentLine.wordStarts.firstOrNull()
+            ?: caret
 }
 
 fun jumpDown(text: String, caret: Int): Int {
-    val textAfterCaret = text.drop(caret)
-    val lines = textAfterCaret.reader().readLines()
-    if (lines.size <= 1) return caret
-
-    val (skipLines, remain) = lines.drop(1).ttt { !it.containsWordChar() }
-    if (remain.isEmpty()) {
-        return caret
-    }
-
-    val goodLines = skipLines + remain.first()
-    val newCaretInLine = run {
-        val caretInLine = text.take(caret).reader().readLines().lastOrNull()?.length ?: 0
-        minOf(caretInLine, goodLines.last().length)
-    }
-
-    val lineSeparator = text.findLineSeparator()!!
-    val newCaret = caret + (listOf(lines.first()) + goodLines.dropLast(1)).joinToString("") { it + lineSeparator }.length + newCaretInLine
-    return newCaret
+    val lines = calcLineOffsets(text)
+    val currentLine = lines.find { it.containsCaret(caret)!! }!!
+    val column = currentLine.column(caret)
+    val validLaterLine = lines.filter { it.lineStart > caret }
+            .dropWhile { it.wordStarts.isEmpty() }
+            .firstOrNull()
+    return validLaterLine?.let { line -> line.wordStarts.firstOrNull { line.column(it) >= column } ?: line.wordStarts.last { line.column(it) < column } }
+            ?: currentLine.wordEnds.lastOrNull()
+            ?: caret
 }
 
-private fun <E> List<E>.ttt(fn: (E) -> Boolean): Pair<List<E>, List<E>> {
-    val taken = this.takeWhile { fn(it) }
-    val remain = this.drop(taken.size)
-    return taken to remain
-}
-
-
-fun String.containsWordChar(): Boolean {
-    return this.any { it.isWordChar() }
-}
-
-private fun String.findLineSeparator(): String? = when {
-    this.contains("\r\n") -> "\r\n"
-    this.contains("\n") -> "\n"
-    this.contains("\r") -> "\r"
-    else -> null
+private fun Char.isLineSeparator(): Boolean {
+    return this == '\r' || this == '\n'
 }
 
 private val wordChars = ("$" + "_" +
@@ -90,3 +59,71 @@ private val wordChars = ("$" + "_" +
         "0123456789").toSet()
 
 private fun Char.isWordChar() = wordChars.contains(this)
+
+data class LineOffsets(
+        var line: Int,
+        var lineStart: Int,
+        var lineEnd: Int? = null,
+        val wordStarts: MutableList<Int> = mutableListOf(),
+        val wordEnds: MutableList<Int> = mutableListOf()
+) {
+    fun containsCaret(caret: Int): Boolean? = lineStart <= caret && caret <= lineEnd!!
+    fun column(caret: Int): Int = caret - lineStart
+}
+
+fun calcLineOffsets(text: String): List<LineOffsets> {
+    val result = mutableListOf<LineOffsets>()
+
+    var lineOffsets: LineOffsets? = null
+
+    var index = 0
+    loop@ while (index <= text.length) {
+        val prevChar = text.getOrNull(index - 1)
+        val nextChar = text.getOrNull(index)
+        if (atLineStart(prevChar, nextChar)) {
+            lineOffsets = if (lineOffsets == null) {
+                LineOffsets(0, lineStart = index)
+            } else {
+                LineOffsets(line = lineOffsets.line + 1, lineStart = index)
+            }
+        }
+        if (atLineEnd(prevChar, nextChar)) {
+            lineOffsets?.let {
+                it.lineEnd = index
+                result.add(it)
+            }
+        }
+        if (atWordStart(prevChar, nextChar)) {
+            lineOffsets?.wordStarts?.add(index)
+        }
+        if (atWordEnd(prevChar, nextChar)) {
+            lineOffsets?.wordEnds?.add(index)
+        }
+        index += 1
+    }
+    return result
+}
+
+private fun atWordStart(prevChar: Char?, nextChar: Char?): Boolean {
+    val prevIsWordChar = prevChar?.isWordChar() ?: false
+    val nextIsWordChar = nextChar?.isWordChar() ?: false
+    return !prevIsWordChar && nextIsWordChar
+}
+
+private fun atWordEnd(prevChar: Char?, nextChar: Char?): Boolean {
+    val prevIsWordChar = prevChar?.isWordChar() ?: false
+    val nextIsWordChar = nextChar?.isWordChar() ?: false
+    return prevIsWordChar && !nextIsWordChar
+}
+
+private fun atLineStart(prevChar: Char?, nextChar: Char?): Boolean {
+    val prevIsLineSeparator = prevChar?.isLineSeparator() ?: true
+    val nextIsLineSeparator = nextChar?.isLineSeparator() ?: false
+    return prevIsLineSeparator && !nextIsLineSeparator
+}
+
+private fun atLineEnd(prevChar: Char?, nextChar: Char?): Boolean {
+    val prevIsLineSeparator = prevChar?.isLineSeparator() ?: false
+    val nextIsLineSeparator = nextChar?.isLineSeparator() ?: true
+    return !prevIsLineSeparator && nextIsLineSeparator
+}

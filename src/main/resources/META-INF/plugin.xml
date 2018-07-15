@@ -2,7 +2,7 @@
     <id>idea-plugin-jump-faster</id>
     <name>idea-plugin-jump-faster</name>
     <version>1.0</version>
-    <vendor email="nowindlee@gmail.com" url="http://freewind.in">None</vendor>
+    <vendor email="nowindlee@gmail.com" url="https://github.com/freewind/idea-plugin-jump-faster">None</vendor>
 
     <description><![CDATA[
       This IDEA plugin makes us jump to left/right/up/down a little faster (than `option + left/right`)
