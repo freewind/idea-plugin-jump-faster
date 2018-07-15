@@ -44,16 +44,20 @@ If the keyshorts are not working, please set them manually for now.
         <group id="jumpfaster" text="_Jump Faster" description="Jump Faster" popup="true">
             <add-to-group group-id="EditMenu" anchor="last"/>
             <action id="action.jumpleft" class="jumpfaster.actions.JumpLeftAction" text="Jump _Left" description="Jump to left word">
-                <keyboard-shortcut first-keystroke="ctrl alt left" keymap="$default"/>
+                <keyboard-shortcut keymap="Mac OS X" first-keystroke="ctrl alt left"/>
+                <keyboard-shortcut keymap="Mac OS X 10.5+" first-keystroke="ctrl alt left"/>
             </action>
             <action id="action.jumpright" class="jumpfaster.actions.JumpRightAction" text="Jump _Right" description="Jump to right word">
-                <keyboard-shortcut first-keystroke="ctrl alt right" keymap="$default"/>
+                <keyboard-shortcut keymap="Mac OS X" first-keystroke="ctrl alt right"/>
+                <keyboard-shortcut keymap="Mac OS X 10.5+" first-keystroke="ctrl alt right"/>
             </action>
             <action id="action.jump-up" class="jumpfaster.actions.JumpUpAction" text="Jump _Up" description="Jump to previous line">
-                <keyboard-shortcut first-keystroke="ctrl alt up" keymap="$default"/>
+                <keyboard-shortcut keymap="Mac OS X" first-keystroke="ctrl alt up"/>
+                <keyboard-shortcut keymap="Mac OS X 10.5+" first-keystroke="ctrl alt up"/>
             </action>
             <action id="action.jump-down" class="jumpfaster.actions.JumpDownAction" text="Jump _Down" description="Jump to next line">
-                <keyboard-shortcut first-keystroke="ctrl alt down" keymap="$default"/>
+                <keyboard-shortcut keymap="Mac OS X" first-keystroke="ctrl alt down"/>
+                <keyboard-shortcut keymap="Mac OS X 10.5+" first-keystroke="ctrl alt down"/>
             </action>
         </group>
 

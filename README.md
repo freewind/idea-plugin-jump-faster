@@ -5,7 +5,7 @@ This IDEA plugin makes us jump to left/right/up/down a little faster (than `opti
 
 In this plugin, I defined words contains only such characters: `a-zA-Z0-9_$`, all others are treated as _blank_ chars when jumping.
 
-For keyshorts are provided (and you can change it too, for me, I just use `option + left/right/up/down`):
+For keyshorts are provided only for Mac keymaps(`Mac OS X` and `Mac OS X 10.5+`), you can define or change them manually:
 
 - `ctrl + option + left`: Jump to previous word, skip all non word chars
 - `ctrl + option + right`: Jump to next word, skip all non word chars
