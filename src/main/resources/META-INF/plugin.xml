@@ -41,7 +41,7 @@ If the keyshorts are not working, please set them manually for now.
 
     <actions>
 
-        <group id="jumpfaster" text="_Jump Faster" description="Jump Faster">
+        <group id="jumpfaster" text="_Jump Faster" description="Jump Faster" popup="true">
             <add-to-group group-id="EditMenu" anchor="last"/>
             <action id="action.jumpleft" class="jumpfaster.actions.JumpLeftAction" text="Jump _Left" description="Jump to left word">
                 <keyboard-shortcut first-keystroke="ctrl alt left" keymap="$default"/>
