@@ -231,4 +231,20 @@ class JumpDownTest {
         val offset = jumpDown("aaa     ", caretAfter("aaa   "))
         assertThat(offset).isEqualTo(caretAfter("aaa"))
     }
+
+    @Test
+    fun `If the caret is in an empty line, it should work well`() {
+        val offset = jumpDown("aaa\n\nbbb", caretAfter("a"))
+        assertThat(offset).isEqualTo(caretAfter("aaa\n\n"))
+    }
+
+    @Test
+    fun `work well with many kinds of line separators`() {
+        assertThat(jumpDown("aaa\rbbb", caretAfter("a"))).isEqualTo(caretAfter("aaa\r"))
+        assertThat(jumpDown("aaa\nbbb", caretAfter("a"))).isEqualTo(caretAfter("aaa\n"))
+        assertThat(jumpDown("aaa\r\nbbb", caretAfter("a"))).isEqualTo(caretAfter("aaa\r\n"))
+        assertThat(jumpDown("aaa\n\rbbb", caretAfter("a"))).isEqualTo(caretAfter("aaa\n\r"))
+        assertThat(jumpDown("aaa\r\rbbb", caretAfter("a"))).isEqualTo(caretAfter("aaa\r\r"))
+        assertThat(jumpDown("aaa\n\nbbb", caretAfter("a"))).isEqualTo(caretAfter("aaa\n\n"))
+    }
 }

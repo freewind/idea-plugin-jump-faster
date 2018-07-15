@@ -117,13 +117,11 @@ private fun atWordEnd(prevChar: Char?, nextChar: Char?): Boolean {
 }
 
 private fun atLineStart(prevChar: Char?, nextChar: Char?): Boolean {
-    val prevIsLineSeparator = prevChar?.isLineSeparator() ?: true
-    val nextIsLineSeparator = nextChar?.isLineSeparator() ?: false
-    return prevIsLineSeparator && !nextIsLineSeparator
+    if (prevChar == '\r' && nextChar == '\n') return false
+    return prevChar?.isLineSeparator() ?: true
 }
 
 private fun atLineEnd(prevChar: Char?, nextChar: Char?): Boolean {
-    val prevIsLineSeparator = prevChar?.isLineSeparator() ?: false
-    val nextIsLineSeparator = nextChar?.isLineSeparator() ?: true
-    return !prevIsLineSeparator && nextIsLineSeparator
+    if (prevChar == '\r' && nextChar == '\n') return false
+    return nextChar?.isLineSeparator() ?: true
 }
